@@ -1,0 +1,41 @@
+import rhinoscriptsyntax as rs
+
+def Kock (v1,v2):
+    dist = rs.Distance(v1,v2)
+
+    
+    p1 = v2-v1
+    p1 = rs.VectorUnitize(p1)
+    p1 *= dist * dist1/3
+    p1 += v1
+
+    p2 = v2-v1
+
+    cross = v2 -v1
+    cross = rs.VectorUnitize(cross)
+    cross = rs.VectorRotate(cross, 90,[0,0,1])
+    cross *=dist*dist4
+
+    p2 = rs.VectorUnitize(p2)
+    p2 *= dist *dist2/2
+    p2 += v1+cross
+
+    p3 = v2-v1
+    p3 = rs.VectorUnitize(p3)
+    p3 *= dist *2*dist3/3
+    p3 += v1
+    return [v1,p1,p2,p3,v2]
+
+def recursive(v1,v2,gens, lineList):
+    if(gens>0):
+        newPts = Kock( v1,v2)
+        l = rs.AddPolyline([newPts[0],newPts[1],newPts[2],newPts[3],newPts[4]])
+        if(gens ==1 ):
+            lineList.append(l)
+        recursive(newPts[0],newPts[1],gens-1, lineList)
+        recursive(newPts[1],newPts[2],gens-1, lineList)
+        recursive(newPts[2],newPts[3],gens-1, lineList)
+        recursive(newPts[3],newPts[4],gens-1, lineList)
+    return lineList
+allLines = []
+a = recursive(x,y,gens,allLines)
